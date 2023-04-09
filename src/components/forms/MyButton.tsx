@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Button: ({
+const MyButton: ({
   children,
   disabled,
   onClick,
@@ -25,4 +25,4 @@ const Button: ({
   );
 };
 
-export default Button;
+export default MyButton;

@@ -1,18 +1,12 @@
 import React from 'react';
 
-type Validador = 'email' | 'number' | 'password' | false;
+type Validador = 'imdb' | false;
 
 const validacao: {[key: string]: {regex: RegExp; message: string}} = {
-  email: {
-    regex: /[^\s@]+@[^\s@]+\.[^\s@]+/,
-    message: 'Preencha um Email válido',
+  imdb: {
+    regex: /ev\d{7}\/\d{4}(-\d)?|(ch|co|ev|nm|tt)\d{7}/,
+    message: 'Preencha um ID do IMDb válido',
   },
-  password: {
-    regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/,
-    message:
-      'A senha precisa ter caracter maiúsculo, minúsculo e digito. Com no mínimo 8 caracteres',
-  },
-  number: {regex: /^\d+$/, message: 'Utilize números apenas'},
 };
 const useForm: (type?: Validador) => {
   value: string;

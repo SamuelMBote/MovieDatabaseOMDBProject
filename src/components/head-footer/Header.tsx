@@ -1,24 +1,79 @@
 import React from 'react';
-import useForm from '../../hooks/useForm';
-import Button from '../forms/Button';
-import Input from '../forms/Input';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Tooltip from '@mui/material/Tooltip';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ModalAPIKey from './ModalAPIKey';
+import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 
 const Header = () => {
-  const salvar = useForm();
+  const [openCloseModal, setOpenCloseMOdal]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+  ] = React.useState<boolean>(false);
 
-  function saveToken() {
-    window.localStorage.setItem('apikey', salvar.value);
+  function handleAPIKeyModal() {
+    setOpenCloseMOdal(!openCloseModal);
   }
-  function deleteToken() {
-    window.localStorage.removeItem('apikey');
-  }
+
   return (
-    <div>
-      <Input label="Salvar" name="salvar" type="text" {...salvar} />
-      <p>{salvar.value}</p>
-      <Button onClick={saveToken}>Salvar</Button>
-      <Button onClick={deleteToken}>Deletar</Button>
-    </div>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <LocalMoviesIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: {xs: 'none', md: 'flex'},
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            THE OMDb API
+          </Typography>
+
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: {xs: 'flex', md: 'none'},
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            THE OMDb API
+          </Typography>
+          <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}></Box>
+
+          <Box sx={{flexGrow: 0}}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleAPIKeyModal} sx={{p: 0}}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Toolbar>
+      </Container>
+      <ModalAPIKey state={openCloseModal} setState={setOpenCloseMOdal} />
+    </AppBar>
   );
 };
 export default Header;

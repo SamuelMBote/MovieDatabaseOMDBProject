@@ -1,4 +1,4 @@
-export default interface bySearch {
+export default interface IbySearch {
   search: string;
   type?: 'movie' | 'series' | 'episode';
   year?: number;

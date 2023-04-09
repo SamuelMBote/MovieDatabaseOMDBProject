@@ -1,19 +1,24 @@
 import React from 'react';
-import useForm from '../hooks/useForm';
-import Button from './forms/Button';
-import Input from './forms/Input';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import SearchForm from './SearchForm';
 
 const Home = () => {
-  const buscar = useForm();
   return (
-    <div>
-      <h1>MB0t3D3v Movie Database</h1>
-      <p>The Open Movie Database API Catalog</p>
-      <form action="">
-        <Input label="Buscar" name="buscar" type="text" {...buscar} />
-        <Button>Buscar</Button>
-      </form>
-    </div>
+    <React.Fragment>
+      <Container maxWidth="lg">
+        <Typography variant="h1" component="h1" align="center" m={2}>
+          Movie Database
+        </Typography>
+        <Typography variant="subtitle1" fontSize={22} align="center" m={3}>
+          The Open Movie Database API Catalog
+        </Typography>
+        <Box alignContent={'center'} alignItems={'center'}>
+          <SearchForm />
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 };
 
