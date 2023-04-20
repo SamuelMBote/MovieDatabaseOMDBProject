@@ -1,4 +1,4 @@
-export default interface IresponseByTitle {
+export default interface IResponseMovie {
   Title: string;
   Year: string;
   Rated: string;

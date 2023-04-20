@@ -16,13 +16,13 @@ const useFetch = () => {
 
   const request: (
     url: string,
-    options: {
+    options?: {
       [key: string]: any;
     },
   ) => Promise<{
     response: Response | undefined;
     json: any;
-  }> = React.useCallback(async (url, options) => {
+  }> = React.useCallback(async (url, options?) => {
     let response;
     let json;
     try {

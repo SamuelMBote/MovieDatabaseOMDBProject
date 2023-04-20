@@ -4,12 +4,16 @@ import {Route, Routes} from 'react-router';
 import Home from './components/Home';
 import Header from './components/head-footer/Header';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import SearchForm from './components/SearchForm';
+import SearchStorage from './providers/SearchStorage';
+import Movie from './components/movie/Movie';
+import Pages from './components/Pages';
 
 const OMDb = () => {
   const theme = createTheme({
     typography: {
       fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
-      fontWeightRegular: 'initial',
+
       h1: {
         fontFamily: ['Sedgwick Ave Display', 'cursive'].join(','),
       },
@@ -29,25 +33,41 @@ const OMDb = () => {
         fontFamily: ['Sedgwick Ave Display', 'cursive'].join(','),
       },
       subtitle1: {
-        fontFamily: ['Playfair Display SC', 'serif'].join(','),
+        fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
       },
       subtitle2: {
-        fontFamily: ['Playfair Display SC', 'serif'].join(','),
+        fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
       },
       button: {
         fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
         fontWeight: 'bold',
       },
+      body1: {
+        fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
+      },
+      body2: {
+        fontFamily: ['Space Grotesk', 'sans-serif'].join(','),
+      },
     },
   });
+  const type = ['movie', 'series', 'episode'];
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
+          <SearchStorage>
+            <SearchForm />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/page/:page" element={<Pages />} />
+              {type.map((type) => {
+                return (
+                  <Route key={type} path={`${type}/:id`} element={<Movie />} />
+                );
+              })}
+            </Routes>
+          </SearchStorage>
         </BrowserRouter>
       </ThemeProvider>
     </React.Fragment>

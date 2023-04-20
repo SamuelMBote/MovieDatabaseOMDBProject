@@ -1,4 +1,4 @@
-export default interface IresponseByID {
+export default interface ISerieFull {
   Title: string;
   Year: string;
   Rated: string;
@@ -13,15 +13,17 @@ export default interface IresponseByID {
   Country: string;
   Awards: string;
   Poster: string;
-  Ratings: {Source: string; Value: string}[];
+  Ratings: [
+    {
+      Source: string;
+      Value: string;
+    },
+  ];
   Metascore: string;
   imdbRating: string;
   imdbVotes: string;
   imdbID: string;
   Type: string;
-  DVD: string;
-  BoxOffice: string;
-  Production: string;
-  Website: string;
+  totalSeasons: string;
   Response: string;
 }

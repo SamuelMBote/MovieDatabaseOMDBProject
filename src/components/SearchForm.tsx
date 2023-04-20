@@ -1,187 +1,185 @@
 import React from 'react';
 import useForm from '../hooks/useForm';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Snackbar, {SnackbarOrigin} from '@mui/material/Snackbar';
-import Grid from '@mui/material/Grid';
-import ISearch from '../interfaces/ISearch';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import MuiAlert, {AlertProps, AlertColor} from '@mui/material/Alert';
+import {
+  Box,
+  TextField,
+  FormControlLabel,
+  Button,
+  Grid,
+  ButtonGroup,
+  Checkbox,
+  Container,
+  Typography,
+  AlertColor,
+} from '@mui/material';
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
-export interface StateAlert extends SnackbarOrigin {
-  open: boolean;
-  message: string;
-  severity?: AlertColor;
-}
+import {SearchContext} from '../providers/SearchStorage';
+import {useNavigate} from 'react-router-dom';
+import ErrorAlert from './helpers/ErrorAlert';
 
 const SearchForm = () => {
   const title = useForm();
   const imdbid = useForm('imdb');
   const year = useForm();
 
-  const [snackBarState, setSnackBarState] = React.useState<StateAlert>({
-    open: false,
+  const {search, setSearch} = React.useContext(SearchContext);
+
+  const [specificTitle, setSpecificTitle]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>,
+  ] = React.useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const [error, setError]: [
+    {error: boolean; message: string; severity: AlertColor},
+    React.Dispatch<
+      React.SetStateAction<{
+        error: boolean;
+        message: string;
+        severity: AlertColor;
+      }>
+    >,
+  ] = React.useState<{error: boolean; message: string; severity: AlertColor}>({
+    error: false,
     message: '',
-    vertical: 'bottom',
-    horizontal: 'right',
+    severity: 'info',
   });
 
-  const {vertical, horizontal, open, message, severity} = snackBarState;
-
-  function handleClick(
-    newState: SnackbarOrigin,
-    message: string,
-    severity: AlertColor,
-  ) {
-    setSnackBarState({open: true, message, severity, ...newState});
-  }
-
-  function handleClose() {
-    setSnackBarState({...snackBarState, open: false});
-  }
-
-  function doSearch() {
-    const search: ISearch = {title: null, imdb: null, year: null};
-    try {
-      if (!imdbid.value.length && !title.value.length)
-        throw new Error('Insira informações de busca');
-
-      if (imdbid.value.length) {
-        const idValido = imdbid.validate();
-        if (idValido) {
-          search.imdb = imdbid.value;
-
-          title.setValue('');
-          year.setValue('');
-        }
-      }
-
-      if (title.value.length) search.title = title.value;
-
-      if (year.value.length) {
-        search.year = year.value;
-      }
-    } catch (error) {
-      if (error instanceof Error)
-        handleClick(
-          {horizontal: 'right', vertical: 'bottom'},
-          error.message,
-          'error',
-        );
-    }
-
-    try {
-      if (
-        search.imdb?.length &&
-        (search.title?.length || search.year?.length)
-      ) {
-        const message =
-          'Atenção você digitou um código IMDB, a pesquisa será feita através desse código e desconsiderará título e/ou ano digitado.';
-        handleClick({horizontal: 'right', vertical: 'bottom'}, message, 'info');
-      }
-    } catch (error) {}
-    requestMovies(search);
-    return search;
-  }
-
-  async function requestMovies(search: ISearch) {
-    let searchLink;
-    const key = window.localStorage.getItem('apikey');
-    const apilink = `http://www.omdbapi.com/?apikey=${key}`;
-    if (search && search.imdb?.length)
-      searchLink = apilink + `&i=${search.imdb}`;
-    console.log(searchLink);
-    return searchLink;
-  }
   function resetSearch() {
     imdbid.setValue('');
     title.setValue('');
     year.setValue('');
+    setSpecificTitle(false);
   }
 
+  function doSearch(): void {
+    try {
+      if (!imdbid.value.length && !title.value.length) {
+        throw new Error('Fill the fields of search');
+      } else if (
+        imdbid.value.length &&
+        (title.value.length || year.value.length)
+      ) {
+        title.setValue('');
+        year.setValue('');
+        if (setSearch)
+          setSearch({
+            ...search,
+            imdb: imdbid.value,
+            title: null,
+            year: null,
+            specific: false,
+          });
+        setError({
+          ...error,
+          error: true,
+          message:
+            'Attention! The 3 fields were filled in but the search will only be done through the IMDB code',
+        });
+      } else {
+        if (setSearch)
+          setSearch({
+            ...search,
+            title: title.value,
+            year: year.value,
+            imdb: null,
+            specific: specificTitle,
+          });
+      }
+    } catch (error) {
+      if (error instanceof Error)
+        setError({
+          ...error,
+          error: true,
+          message: error.message,
+          severity: 'error',
+        });
+    }
+    navigate('/');
+  }
+
+  React.useEffect(() => {}, []);
   return (
-    <div>
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={{xs: 2, md: 3}}
-        columns={{xs: 4, sm: 8, md: 12}}
-      >
-        <Grid item xs={12} md={6}>
-          <TextField
-            fullWidth
-            id="searchByTitle"
-            label="Digite o título"
-            variant="outlined"
-            onChange={title.onChange}
-            value={title.value}
-            onBlur={title.onBlur}
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField
-            fullWidth
-            id="searchByIMDBID"
-            label="Digite código IMDB"
-            variant="outlined"
-            type="text"
-            value={imdbid.value}
-            onChange={imdbid.onChange}
-            error={imdbid.error ? true : false}
-            helperText={imdbid.error ? imdbid.error : false}
-          />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <TextField
-            fullWidth
-            id="searchWithYear"
-            label="Digite o ano do filme"
-            variant="outlined"
-            type="number"
-            value={year.value}
-            onChange={year.onChange}
-            onBlur={year.onBlur}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <ButtonGroup
-            disableElevation
-            aria-label="Disabled elevation buttons"
-            size="large"
-          >
-            <Button variant="contained" color="error" onClick={resetSearch}>
-              Reset
-            </Button>
-            <Button variant="outlined" onClick={doSearch}>
-              Buscar
-            </Button>
-          </ButtonGroup>
-        </Grid>
-      </Grid>
-      <Snackbar
-        anchorOrigin={{vertical, horizontal}}
-        open={open}
-        onClose={handleClose}
-        key={vertical + horizontal}
-      >
-        <Alert
-          onClose={handleClose}
-          severity={severity ? severity : 'info'}
-          sx={{width: '100%'}}
+    <Container maxWidth="lg">
+      <Typography variant="subtitle1" fontSize={22} align="center" m={3}>
+        Search about your favorite movie in Open Movie Database API Catalog
+      </Typography>
+      <Box component={'form'}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={{xs: 2, md: 3}}
         >
-          {message}
-        </Alert>
-      </Snackbar>
-    </div>
+          <Grid item xs={12} md={6}>
+            <TextField
+              fullWidth
+              id="searchByTitle"
+              label="Type the movie title"
+              variant="outlined"
+              onChange={title.onChange}
+              value={title.value}
+              onBlur={title.onBlur}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              id="searchByIMDBID"
+              label="Type the IMDB code"
+              variant="outlined"
+              type="text"
+              value={imdbid.value}
+              onChange={imdbid.onChange}
+              error={imdbid.error ? true : false}
+              helperText={imdbid.error ? imdbid.error : false}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              id="searchWithYear"
+              label="Type the movie year"
+              variant="outlined"
+              type="number"
+              value={year.value}
+              onChange={year.onChange}
+              onBlur={year.onBlur}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <ButtonGroup
+              disableElevation
+              aria-label="Disabled elevation buttons"
+              size="large"
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value={specificTitle ? 'on' : 'off'}
+                    checked={specificTitle}
+                    onChange={() => setSpecificTitle(!specificTitle)}
+                  />
+                }
+                label="Search for specific title"
+              />
+              <Button variant="contained" color="error" onClick={resetSearch}>
+                Reset
+              </Button>
+              <Button variant="outlined" onClick={doSearch}>
+                Search
+              </Button>
+            </ButtonGroup>
+          </Grid>
+        </Grid>
+      </Box>
+      <ErrorAlert
+        error={error.error}
+        message={error.message}
+        severity={error.severity}
+      />
+    </Container>
   );
 };
 
