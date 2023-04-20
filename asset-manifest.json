@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/MovieDatabaseOMDBProject/static/js/main.586bf25d.js",
+    "index.html": "/MovieDatabaseOMDBProject/index.html",
+    "main.586bf25d.js.map": "/MovieDatabaseOMDBProject/static/js/main.586bf25d.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.586bf25d.js"
+  ]
+}
