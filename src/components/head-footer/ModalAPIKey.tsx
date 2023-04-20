@@ -1,11 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {Button,TextField,Dialog,DialogActions,DialogContent,DialogContentText,DialogTitle} from '@mui/material';
 import {Link} from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
@@ -47,20 +41,15 @@ const ModalAPIKey = ({
     }
   }, [setState]);
 
-  /*<div>
-    <Input label="Salvar" name="salvar" type="text" {...salvar} />
-    <p>{salvar.value}</p>
-    <Button onClick={saveToken}>Salvar</Button>
-    <Button onClick={deleteToken}>Deletar</Button>
-  </div>;*/
   return (
     <div>
       <Dialog open={state} onClose={handleClose}>
         <DialogTitle>Insira sua key</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Para usar esse site você precisa ter uma chave da api do Open Movie
-            Data Base, Se você ainda não tem uma acesse{' '}
+            To use this website you need to have an Open Movie Data Base api key
+            If you don't have
+            If you don't have one yet, go to: {' '}
             <Link to={'https://www.omdbapi.com/apikey.aspx'}>
               www.omdbapi.com/apikey.aspx
             </Link>
@@ -83,14 +72,14 @@ const ModalAPIKey = ({
             onClick={saveToken}
             startIcon={<SaveIcon />}
           >
-            Salvar
+            Save
           </Button>
           <Button
             onClick={deleteToken}
             color="error"
             startIcon={<DeleteIcon />}
           >
-            Deletar
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
