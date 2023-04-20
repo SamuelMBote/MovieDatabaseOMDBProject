@@ -19,13 +19,13 @@ const Pages = () => {
 
   React.useEffect(() => {
     if (search && search.title && page) {
-      const {URL} = searchMultipleTitle({
+      const {URL, options} = searchMultipleTitle({
         search: search.title,
         year: search.year,
         page: page,
       });
-      console.log(URL);
-      request(URL);
+
+      request(URL, {});
       document.title = `Movie Database - Search: ${search.title} - Page: ${page}`;
     }
   }, [page]);

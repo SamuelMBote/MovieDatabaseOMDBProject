@@ -96,9 +96,9 @@ const SearchForm = () => {
         });
     }
     navigate('/');
+    console.log('pesquisou');
   }
 
-  React.useEffect(() => {}, []);
   return (
     <Container maxWidth="lg">
       <Typography variant="subtitle1" fontSize={22} align="center" m={3}>

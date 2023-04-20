@@ -12,19 +12,14 @@ const Home = () => {
   const {data, request} = useFetch();
 
   React.useEffect(() => {
-    if (setSearch) {
-      setSearch({...search});
-    }
-    const {request_url} = searchMoviesList(search);
+    const {request_url, request_options} = searchMoviesList(search);
     if (request_url) {
-      request(request_url);
+      const response = request(request_url, {});
+      console.log(request_url, request_options);
+      console.log(response);
+      console.log(data);
     }
-    if (search) {
-      document.title = `Movie Database - Search: ${
-        search.title || search.imdb
-      }`;
-    }
-  }, [search, request, setSearch]);
+  }, [search, setSearch]);
 
   return (
     <Container>

@@ -24,8 +24,8 @@ const Movie = () => {
   const {data, request} = useFetch();
   React.useEffect(() => {
     if (id) {
-      const {URL} = searchByID({id, plot: 'full'});
-      request(URL);
+      const {URL, options} = searchByID({id, plot: 'full'});
+      request(URL, {});
     }
   }, [id, request]);
 

@@ -24,9 +24,8 @@ const SearchStorage = ({children}: {children: JSX.Element[]}) => {
     if (setSearch) {
       setSearch({...search});
     }
-
     window.localStorage.setItem('search', JSON.stringify(search));
-  }, [search]);
+  }, []);
 
   return (
     <div>
