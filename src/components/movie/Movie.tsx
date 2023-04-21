@@ -56,7 +56,7 @@ const Movie = () => {
   }, [data]);
   if (loading)
     return (
-      <Box sx={{display: 'flex'}} >
+      <Box sx={{display: 'flex'}}>
         <Container maxWidth="lg">
           <CircularProgress />
         </Container>
@@ -256,12 +256,33 @@ const Movie = () => {
                   Language: {data.Language}
                 </Typography>
                 <Typography component={'p'}>Country: {data.Country}</Typography>
-                <>
+                <Stack direction={'row'} my={1}>
+                  Country:{' '}
+                  {data.Country.split(', ').map((country) => {
+                    return (
+                      <Chip
+                        key={country}
+                        avatar={
+                          <Avatar
+                            alt="Natacha"
+                            sx={{width: 16, height: 12}}
+                            src={`https://flagcdn.com/16x12/${flagOfCountry(
+                              country,
+                            )}.png`}
+                          />
+                        }
+                        label={country}
+                        variant="outlined"
+                      />
+                    );
+                  })}
+                </Stack>
+                <Stack direction={'row'} my={1}>
                   Genre:{' '}
                   {data.Genre.split(', ').map((genre) => {
                     return <Chip key={genre} label={genre} />;
                   })}
-                </>
+                </Stack>
               </Box>
               <Box component={'div'} my={2}>
                 <Typography component={'p'}>
