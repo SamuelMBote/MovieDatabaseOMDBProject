@@ -36,7 +36,7 @@ const useFetch = () => {
         if ('message' in json) {
           throw new Error(json.message);
         } else {
-          throw new Error('Erro ao fazer fetch');
+          throw new Error('Error on fetch');
         }
       }
     } catch (error) {

@@ -1,5 +1,11 @@
 import React from 'react';
-import {Grid, Typography, Box, Container} from '@mui/material';
+import {
+  Grid,
+  Typography,
+  Box,
+  Container,
+  CircularProgress,
+} from '@mui/material';
 
 import MovieCard from './MovieCard';
 import {IMovieList} from '../../interfaces/IMovieList';
@@ -11,10 +17,20 @@ import ErrorAlert from '../helpers/ErrorAlert';
 const MovieList = ({
   movieList,
   page,
+  loading,
 }: {
   movieList: IMovieList | IMoviePartial | null;
   page?: string;
+  loading: boolean;
 }) => {
+  if (loading)
+    return (
+      <Box sx={{display: 'flex'}}>
+        <Container maxWidth="lg">
+          <CircularProgress />
+        </Container>
+      </Box>
+    );
   if (
     movieList &&
     typeof movieList === 'object' &&
@@ -73,7 +89,7 @@ const MovieList = ({
     return (
       <section>
         <Box>
-          <Container>
+          <Container maxWidth="lg">
             <Typography variant="body1">
               No search made or no results found
             </Typography>

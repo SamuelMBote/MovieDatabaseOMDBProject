@@ -9,7 +9,7 @@ import PaginationMovies from './helpers/PaginationMovies';
 
 const Home = () => {
   const {search, setSearch} = React.useContext(SearchContext);
-  const {data, request} = useFetch();
+  const {data, request, loading} = useFetch();
 
   React.useEffect(() => {
     const {request_url} = searchMoviesList(search);
@@ -23,7 +23,7 @@ const Home = () => {
       <PaginationMovies data={data} />
       <Box my={2}>
         <Container>
-          <MovieList movieList={data} />
+          <MovieList movieList={data} loading={loading} />
         </Container>
       </Box>
     </Container>

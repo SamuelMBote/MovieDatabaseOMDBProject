@@ -5,7 +5,7 @@ type Validador = 'imdb' | false;
 const validacao: {[key: string]: {regex: RegExp; message: string}} = {
   imdb: {
     regex: /ev\d{7}\/\d{4}(-\d)?|(ch|co|ev|nm|tt)\d{7}/,
-    message: 'Preencha um ID do IMDb válido',
+    message: 'Use a valid IMDB ID',
   },
 };
 const useForm: (type?: Validador) => {
@@ -27,8 +27,11 @@ const useForm: (type?: Validador) => {
 
   function validate(value: string): boolean {
     if (type === false) return true;
-    if (value.length === 0) {
-      setError('Preencha um valor');
+    if (value.length === 0 && type === 'imdb') {
+      setError('Fill this field if you want to use imdb search');
+      return false;
+    } else if (value.length === 0) {
+      setError('Fill this field');
       return false;
     } else if (type && validacao[type] && !validacao[type].regex.test(value)) {
       setError(validacao[type].message);

@@ -8,6 +8,7 @@ import SearchForm from './components/SearchForm';
 import SearchStorage from './providers/SearchStorage';
 import Movie from './components/movie/Movie';
 import Pages from './components/Pages';
+import Footer from './components/head-footer/Footer';
 
 const OMDb = () => {
   const theme = createTheme({
@@ -69,6 +70,7 @@ const OMDb = () => {
             </Routes>
           </SearchStorage>
         </BrowserRouter>
+        <Footer />
       </ThemeProvider>
     </React.Fragment>
   );

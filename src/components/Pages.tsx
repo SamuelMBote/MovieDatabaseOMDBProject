@@ -9,7 +9,7 @@ import {searchMultipleTitle} from '../functions/searchMovies';
 
 const Pages = () => {
   const {page} = useParams();
-  const {data, request} = useFetch();
+  const {data, request, loading} = useFetch();
   const {search, setSearch} = React.useContext(SearchContext);
   React.useEffect(() => {
     if (setSearch && page) {
@@ -19,7 +19,7 @@ const Pages = () => {
 
   React.useEffect(() => {
     if (search && search.title && page) {
-      const {URL, options} = searchMultipleTitle({
+      const {URL} = searchMultipleTitle({
         search: search.title,
         year: search.year,
         page: page,
@@ -35,7 +35,7 @@ const Pages = () => {
       <PaginationMovies data={data} page={page} />
       <Box my={2}>
         <Container>
-          <MovieList movieList={data} />
+          <MovieList movieList={data} loading={loading} />
         </Container>
       </Box>
     </Container>

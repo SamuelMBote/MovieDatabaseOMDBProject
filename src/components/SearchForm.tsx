@@ -50,6 +50,8 @@ const SearchForm = () => {
     title.setValue('');
     year.setValue('');
     setSpecificTitle(false);
+    if (setSearch) setSearch({...search, title: null, imdb: null, year: null});
+    navigate('/');
   }
 
   function doSearch(): void {
@@ -96,7 +98,6 @@ const SearchForm = () => {
         });
     }
     navigate('/');
-    console.log('pesquisou');
   }
 
   return (
@@ -116,42 +117,56 @@ const SearchForm = () => {
             <TextField
               fullWidth
               id="searchByTitle"
-              label="Type the movie title"
+              label="Movie Title"
               variant="outlined"
               onChange={title.onChange}
               value={title.value}
-              onBlur={title.onBlur}
+              onBlur={() => {
+                title.onBlur();
+                document.getElementById('btnSearch')?.focus();
+              }}
+              helperText="You can search using the title"
+            />
+          </Grid>{' '}
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField
+              fullWidth
+              id="searchWithYear"
+              label="Movie Year"
+              variant="outlined"
+              type="number"
+              value={year.value}
+              onChange={year.onChange}
+              onBlur={() => {
+                year.onBlur();
+                document.getElementById('btnSearch')?.focus();
+              }}
+              helperText="If you want, enter a year"
             />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <TextField
               fullWidth
               id="searchByIMDBID"
-              label="Type the IMDB code"
+              label="IMDB code"
               variant="outlined"
               type="text"
               value={imdbid.value}
               onChange={imdbid.onChange}
+              onBlur={() => {
+                imdbid.onBlur();
+                document.getElementById('btnSearch')?.focus();
+              }}
               error={imdbid.error ? true : false}
-              helperText={imdbid.error ? imdbid.error : false}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <TextField
-              fullWidth
-              id="searchWithYear"
-              label="Type the movie year"
-              variant="outlined"
-              type="number"
-              value={year.value}
-              onChange={year.onChange}
-              onBlur={year.onBlur}
+              helperText={
+                imdbid.error ? imdbid.error : 'Or search using the IMDB ID'
+              }
             />
           </Grid>
           <Grid item xs={12}>
             <ButtonGroup
               disableElevation
-              aria-label="Disabled elevation buttons"
+              aria-label="Button Group"
               size="large"
             >
               <FormControlLabel
@@ -162,12 +177,12 @@ const SearchForm = () => {
                     onChange={() => setSpecificTitle(!specificTitle)}
                   />
                 }
-                label="Search for specific title"
+                label="Click here for specific title"
               />
               <Button variant="contained" color="error" onClick={resetSearch}>
                 Reset
               </Button>
-              <Button variant="outlined" onClick={doSearch}>
+              <Button id="btnSearch" variant="outlined" onClick={doSearch}>
                 Search
               </Button>
             </ButtonGroup>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card} from '@mui/material';
+import {Card, Typography} from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardActions from '@mui/material/CardActions';
@@ -28,11 +28,12 @@ const MovieCard = ({Title, Year, imdbID, Type, Poster}: IMoviePartial) => {
 
       <CardActions>
         <IconButton
-          aria-label="add to favorites"
+          aria-label="See more"
           onClick={() => navigate(`/${Type}/${imdbID}`)}
         >
           <LaunchIcon />
-        </IconButton>
+        </IconButton>{' '}
+        <Typography variant="caption">Click the button for more</Typography>
       </CardActions>
     </Card>
   );

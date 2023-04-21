@@ -9,6 +9,7 @@ import {
   Avatar,
   Chip,
   Stack,
+  CircularProgress,
 } from '@mui/material';
 
 import React from 'react';
@@ -21,18 +22,46 @@ import isSerieFull from '../../interfaces/typeCheck/isSerieFull';
 const Movie = () => {
   const {id} = useParams();
 
-  const {data, request} = useFetch();
+  const {data, request, loading} = useFetch();
   React.useEffect(() => {
     if (id) {
-      const {URL, options} = searchByID({id, plot: 'full'});
+      const {URL} = searchByID({id, plot: 'full'});
       request(URL, {});
     }
   }, [id, request]);
+
+  function flagOfCountry(countryName: string) {
+    let localFlags = window.localStorage.getItem('flags');
+    localFlags = localFlags && JSON.parse(localFlags);
+    let code: string[] = [];
+    if (localFlags) {
+      code = Object.entries(localFlags)
+        .filter((flag) => {
+          return flag[1] === countryName;
+        })
+        .map((code) => code[0]);
+    }
+    return code;
+  }
 
   React.useEffect(() => {
     if (data && (isMovieFull(data) || isSerieFull(data)))
       document.title = data.Title;
   }, [data]);
+
+  React.useEffect(() => {
+    if (data && (isMovieFull(data) || isSerieFull(data))) {
+      const teste = data.Country.split(', ').map(flagOfCountry);
+    }
+  }, [data]);
+  if (loading)
+    return (
+      <Box sx={{display: 'flex'}} >
+        <Container maxWidth="lg">
+          <CircularProgress />
+        </Container>
+      </Box>
+    );
   if (data && isMovieFull(data) && data.Type === 'movie') {
     return (
       <Box component={'section'} my={2} sx={{flexGrow: 1}}>
@@ -87,13 +116,33 @@ const Movie = () => {
                 <Typography component={'p'}>
                   Language: {data.Language}
                 </Typography>
-                <Typography component={'p'}>Country: {data.Country}</Typography>
-                <>
+                <Stack direction={'row'} my={1}>
+                  Country:{' '}
+                  {data.Country.split(', ').map((country) => {
+                    return (
+                      <Chip
+                        key={country}
+                        avatar={
+                          <Avatar
+                            alt="Natacha"
+                            sx={{width: 16, height: 12}}
+                            src={`https://flagcdn.com/16x12/${flagOfCountry(
+                              country,
+                            )}.png`}
+                          />
+                        }
+                        label={country}
+                        variant="outlined"
+                      />
+                    );
+                  })}
+                </Stack>
+                <Stack direction={'row'} my={1}>
                   Genre:{' '}
                   {data.Genre.split(', ').map((genre) => {
                     return <Chip key={genre} label={genre} />;
                   })}
-                </>
+                </Stack>
               </Box>
               <Box component={'div'} my={2}>
                 <Typography component={'p'}>

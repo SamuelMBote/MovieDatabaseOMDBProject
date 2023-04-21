@@ -12,6 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ModalAPIKey from './ModalAPIKey';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
 import {useNavigate} from 'react-router-dom';
+import useFetch from '../../hooks/useFetch';
 
 const Header = () => {
   const [openCloseModal, setOpenCloseMOdal]: [
@@ -23,6 +24,16 @@ const Header = () => {
     setOpenCloseMOdal(!openCloseModal);
   }
   const navigate = useNavigate();
+
+  const {data, request} = useFetch();
+  React.useEffect(() => {
+    const localFlags = window.localStorage.getItem('flags');
+    if (!localFlags) {
+      request('https://flagcdn.com/en/codes.json', {});
+      window.localStorage.setItem('flags', JSON.stringify(data));
+    }
+  }, []);
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -32,7 +43,11 @@ const Header = () => {
             variant="h6"
             noWrap
             component="a"
-            onClick={() => navigate('/')}
+            href="/"
+            onClick={(event) => {
+              event.preventDefault();
+              navigate('/');
+            }}
             sx={{
               mr: 2,
               display: {xs: 'none', md: 'flex'},
