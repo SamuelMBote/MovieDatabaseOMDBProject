@@ -1,8 +1,17 @@
 import React from 'react';
-import {Toolbar,IconButton,Typography,Box,AppBar,Container,Tooltip} from '@mui/material';
+import {
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  AppBar,
+  Container,
+  Tooltip,
+} from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import ModalAPIKey from './ModalAPIKey';
 import LocalMoviesIcon from '@mui/icons-material/LocalMovies';
+import {useNavigate} from 'react-router-dom';
 
 const Header = () => {
   const [openCloseModal, setOpenCloseMOdal]: [
@@ -13,7 +22,7 @@ const Header = () => {
   function handleAPIKeyModal() {
     setOpenCloseMOdal(!openCloseModal);
   }
-
+  const navigate = useNavigate();
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -23,7 +32,7 @@ const Header = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            onClick={() => navigate('/')}
             sx={{
               mr: 2,
               display: {xs: 'none', md: 'flex'},
@@ -56,7 +65,7 @@ const Header = () => {
             variant="h5"
             noWrap
             component="a"
-            href="/"
+            onClick={() => navigate('/')}
             sx={{
               mr: 2,
               display: {xs: 'flex', md: 'none'},

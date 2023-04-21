@@ -54,7 +54,7 @@ const OMDb = () => {
   return (
     <React.Fragment>
       <ThemeProvider theme={theme}>
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <Header />
           <SearchStorage>
             <SearchForm />

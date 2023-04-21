@@ -12,12 +12,9 @@ const Home = () => {
   const {data, request} = useFetch();
 
   React.useEffect(() => {
-    const {request_url, request_options} = searchMoviesList(search);
+    const {request_url} = searchMoviesList(search);
     if (request_url) {
-      const response = request(request_url, {});
-      console.log(request_url, request_options);
-      console.log(response);
-      console.log(data);
+      request(request_url, {});
     }
   }, [search, setSearch]);
 
